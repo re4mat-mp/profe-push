@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Profe Push: a music class to practise with an Ableton Push 3 in your hands</title>
+<meta name="description" content="An interactive class, in Spanish, for practising with a Push 3: chords, drums, layers, song structure and DJ ear training. Every sound is made in the browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://re4mat-mp.github.io/profe-push/">
+<meta property="og:title" content="Profe Push: a music class to practise with a Push 3 in your hands">
+<meta property="og:description" content="Chords, drums, layers, song structure and DJ ear training, with the pads drawn the way your Push shows them. Every sound is made in the browser.">
+<meta property="og:image" content="https://re4mat-mp.github.io/profe-push/media/profe-push.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --ink:#15171C;--ink2:#3D424C;--ink3:#5F6672;--ground:#F1F2F4;--pale:#E7E9ED;--acc:#6A4CF5;--acc-l:#DCD4FF}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
+  a{color:var(--ink);text-decoration-color:var(--acc);text-decoration-thickness:2px;text-underline-offset:3px}
+  .tone-acc{background-color:var(--acc-l);background-image:radial-gradient(rgba(21,23,28,.14) 1.2px,transparent 1.4px);background-size:6px 6px}
+  main{max-width:1140px;margin:0 auto;padding:40px 40px 24px}
+
+  /* the header: the same shape as the portfolio's front page */
+  .top{display:flex;gap:26px;align-items:center}
+  .badge{flex:0 0 auto;width:104px;height:104px;border:3px solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-4deg);line-height:1}
+  .badge .g{font-size:40px;font-weight:900;letter-spacing:-.02em}
+  .badge .k{font-size:11px;font-weight:800;letter-spacing:.07em;margin-top:6px}
+  .kick{font-size:15px;font-weight:700;color:var(--ink3);letter-spacing:.05em;margin-bottom:4px}
+  h1{margin:0;font-size:clamp(34px,5vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
+  .lead{margin:8px 0 0;font-size:clamp(18px,2vw,22px);line-height:1.4;color:var(--ink2);max-width:46em}
+  .lead mark{background:linear-gradient(transparent 60%,var(--acc-l) 60%);color:var(--ink);font-weight:800}
+
+  /* the class's own frames: dark, like the Push */
+  .screen{display:block;border:2.5px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;background:#131519;line-height:0}
+  .screen img{display:block;width:100%;height:auto}
+  figure{margin:0}
+  figcaption{margin-top:14px;font-size:19px;line-height:1.35;color:var(--ink2)}
+  figcaption b{color:var(--ink);font-weight:850}
+  .n{display:inline-block;width:26px;height:26px;border:2.2px solid var(--ink);border-radius:13px;text-align:center;line-height:22px;
+    font-size:15px;font-weight:900;color:var(--ink);margin-right:8px;vertical-align:2px;background:#fff}
+
+  .playrow{display:grid;grid-template-columns:420px 1fr;gap:44px;align-items:start;margin-top:38px}
+  .go{padding-top:6px}
+  a.play{display:inline-flex;align-items:center;gap:14px;background:var(--acc);color:#fff;text-decoration:none;border:3px solid var(--ink);
+    border-radius:44px;box-shadow:6px 6px 0 var(--ink);padding:14px 40px 16px 32px;font-size:40px;font-weight:900;letter-spacing:-.01em;
+    -webkit-tap-highlight-color:transparent;transition:transform .12s,box-shadow .12s}
+  a.play:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+  a.play:active{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--ink)}
+  a.play:focus-visible{outline:3px solid var(--acc);outline-offset:5px}
+  a.play svg{width:30px;height:30px;flex:0 0 auto}
+  .how{margin:18px 0 0;font-size:18px;color:var(--ink3);line-height:1.4;max-width:34em}
+  .links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+  .links a{border:2.5px solid var(--ink);border-radius:22px;box-shadow:3px 3px 0 var(--ink);padding:7px 16px;font-size:16px;font-weight:800;
+    text-decoration:none;background:#fff}
+  .links a:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .facts{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 0;padding:0;list-style:none}
+  .facts li{border:2px solid var(--ink);border-radius:8px;padding:3px 10px;font-size:15px;font-weight:700;background:var(--pale)}
+
+  .beats{display:grid;grid-template-columns:1fr;gap:40px;margin-top:40px}
+
+  .notes{max-width:760px;margin:44px 0 0;font-size:16px;line-height:1.55;color:var(--ink2)}
+  .notes p{margin:0 0 10px}
+  .notes h2{font-size:15px;letter-spacing:.05em;color:var(--ink3);margin:0 0 8px}
+  .fine{max-width:760px;margin:26px 0 0;padding-top:14px;border-top:2px solid var(--pale);font-size:13.5px;line-height:1.5;color:var(--ink3)}
+  footer{max-width:1140px;margin:0 auto;padding:6px 40px 48px;font-size:15px;color:var(--ink3)}
+
+  @media (max-width:1000px){
+    .playrow{grid-template-columns:1fr;gap:28px}
+    .playrow .screen{max-width:420px}
+  }
+  @media (max-width:640px){
+    main{padding:24px 18px 16px}
+    .top{gap:16px}
+    .badge{width:72px;height:72px;border-radius:14px;box-shadow:4px 4px 0 var(--ink)}
+    .badge .g{font-size:27px}.badge .k{font-size:8.5px;margin-top:4px}
+    .kick{font-size:13px}
+    .playrow{margin-top:26px;gap:24px}
+    a.play{display:flex;justify-content:center;font-size:34px;padding:12px 24px 14px}
+    .how{font-size:17px}
+    figcaption{font-size:17px}
+    .beats{gap:30px;margin-top:30px}
+    footer{padding:6px 18px 40px}
+  }
+  @media (prefers-reduced-motion:reduce){a.play,.links a{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="badge tone-acc" aria-hidden="true"><span class="g">音楽</span><span class="k">MUSIC</span></div>
+    <div>
+      <div class="kick">re4mat-mp · profe-push</div>
+      <h1>Profe Push</h1>
+    </div>
+  </header>
+  <p class="lead">A music class to practise with a Push 3 <mark>in your hands</mark>. The pads on screen are laid out the
+    way the Push shows them, and every note says why it is there. I made it with Claude to learn my own instrument.</p>
+
+  <section class="playrow" aria-label="Open the class">
+    <figure>
+      <a class="screen" href="clase/" aria-label="Open the class"><img src="media/pads.png" width="560" height="659"
+        alt="The Push 3 drawn on screen: its display reads Dm7, i7 in D Dorian, D F A C, and on the 8 by 8 pads the four notes of the chord are lit and numbered 1, 3, 5 and 7, with dashed outlines where the hand goes next"></a>
+      <figcaption><span class="n">1</span><b>What to press, and why</b>: every chord on the pads</figcaption>
+    </figure>
+    <div class="go">
+      <a class="play" href="clase/"><svg viewBox="0 0 30 30" aria-hidden="true"><path d="M7 4 L26 15 L7 26 Z" fill="#fff" stroke="#15171C" stroke-width="2.5" stroke-linejoin="round"/></svg>Open the class</a>
+      <p class="how">In the browser, nothing to install, with sound. The class is in Spanish. With a Push plugged in by USB,
+        Chrome or Edge can listen to what you play.</p>
+      <div class="links">
+        <a href="https://github.com/re4mat-mp/profe-push">The repo and how it was made →</a>
+        <a href="https://re4mat-mp.github.io/">← All the pieces</a>
+      </div>
+      <ul class="facts" aria-label="Facts">
+        <li>5 rooms</li><li>4 moods</li><li>3 scales</li><li>8 drum styles</li><li>4 DJ ear games</li><li>no samples</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="beats" aria-label="What the class looks like">
+    <figure>
+      <div class="screen"><img src="media/drums.png" width="1232" height="330" loading="lazy"
+        alt="A drum pattern over two bars: rows for kick, rim, snare, hats, shaker and conga, each sixteenth note a square, the hits coloured"></div>
+      <figcaption><span class="n">2</span><b>Drums</b>: eight styles, from trip-hop to jungle, and the pads to switch on</figcaption>
+    </figure>
+    <figure>
+      <div class="screen"><img src="media/song.png" width="1232" height="313" loading="lazy"
+        alt="A song map: intro, verse, chorus, break, chorus and outro across the top, and five layers below, drums, bass, chords, melody and texture, lit where they play"></div>
+      <figcaption><span class="n">3</span><b>From loop to song</b>: the same layers, switched on and off</figcaption>
+    </figure>
+  </section>
+
+  <div class="notes">
+    <h2>TEXT VERSION, FOR PEOPLE AND FOR AI</h2>
+    <p>Profe Push is one HTML page, in Spanish, with five rooms. <b>Acordes</b> draws each chord of the scale on the Push's
+      pads, numbers its notes 1, 3, 5 and 7, and marks where the hand goes for the next chord. <b>Batería</b> has eight drum
+      styles (trip-hop, dub, boom-bap, minimal, house, techno, drum &amp; bass, jungle) as an editable two-bar pattern and
+      as the pads to light in drum mode. <b>Capas</b> stacks drums, bass, chords, melody and texture, one track each.
+      <b>Estructura</b> turns a loop into a song by switching the same layers on and off. <b>Oído DJ</b> has four ear games:
+      which record is ahead, which is faster, match the tempo, and keep the beat.</p>
+    <p>Four moods set the key, tempo, drums and sound, named after the artists they point at. Every sound is synthesised
+      in the browser with the Web Audio API: no samples, no downloads.</p>
+  </div>
+
+  <p class="fine">Not affiliated with Ableton. Push and Live are Ableton's names; this is a practice page made by a
+    player, and the artists named in the moods are only pointers to a sound.</p>
+</main>
+<footer>Back to the portfolio: <a href="https://re4mat-mp.github.io/">re4mat-mp.github.io</a> · <a href="https://github.com/re4mat-mp">github.com/re4mat-mp</a></footer>
+</body>
+</html>
